@@ -514,27 +514,26 @@ def runNivi():
         root.mainloop()
 
     elif "open snake game" in text.lower():
+        playsound("/Users/Kanix/PycharmProjects/pythonProject12/sounds/activate2.mp3")
+        speech("Opening Snake Game.Enjoy playing.")
         try:
-            playsound("/Users/Kanix/PycharmProjects/pythonProject12/sounds/activate2.mp3")
-            speech("Opening snake game! Enjoy playing.")
-            import csv
             import turtle
             import time
             import random
+            import csv
+            # leaderboard
 
-            
+            maxi = 0
 
             delay = 0.1
             score = 0
             high_score = maxi
-
             # Screen
             screen = turtle.Screen()
             screen.title("NIVI SNAKE GAME")
             screen.setup(width=700, height=700)
             screen.tracer(0)
             screen.bgcolor("green")
-
             turtle.speed(5)
             turtle.pensize(4)
             turtle.penup()
@@ -550,7 +549,6 @@ def runNivi():
             turtle.forward(500)
             turtle.penup()
             turtle.hideturtle()
-
             # SNAKE
             snake = turtle.Turtle()
             snake.speed(0)
@@ -559,7 +557,6 @@ def runNivi():
             snake.penup()
             snake.goto(0, 0)
             snake.direction = "stop"
-
             # SNAKE FOOD
             food = turtle.Turtle()
             food.speed(0)
@@ -567,9 +564,7 @@ def runNivi():
             food.color("red")
             food.penup()
             food.goto(0, 100)
-
             segments = []
-
             # pen
             pen = turtle.Turtle()
             pen.speed(0)
@@ -578,65 +573,57 @@ def runNivi():
             pen.penup()
             pen.hideturtle()
             pen.goto(0, 260)
-            pen.write("Score: 0  High Score: {}".format(high_score), align="center", font=("Courier", 24, "normal"))
-
+            pen.write("Score: 0 High Score: {}".format(high_score), align="center", font=("Courier", 24, "normal"))
             # SNAKE MOVEMENTS
 
             def go_up():
                 if snake.direction != "down":
                     snake.direction = "up"
                     pen.clear()
-                    pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+                    pen.write("Score: {} High Score: {}".format(score, high_score),align="center", font=("Courier", 24, "normal"))
 
             def go_down():
                 if snake.direction != "up":
                     snake.direction = "down"
                     pen.clear()
-                    pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+                    pen.write("Score: {} High Score: {}".format(score, high_score),align="center", font=("Courier", 24, "normal"))
 
             def go_left():
                 if snake.direction != "right":
                     snake.direction = "left"
                     pen.clear()
-                    pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+                    pen.write("Score: {} High Score: {}".format(score, high_score),align="center", font=("Courier", 24, "normal"))
 
             def go_right():
                 if snake.direction != "left":
                     snake.direction = "right"
                     pen.clear()
-                    pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+                    pen.write("Score: {} High Score: {}".format(score, high_score),align="center", font=("Courier", 24, "normal"))
 
             def move():
                 pen.goto(0, 260)
                 if snake.direction == 'up':
                     y = snake.ycor()
                     snake.sety(y + 20)
-
                 if snake.direction == 'down':
                     y = snake.ycor()
                     snake.sety(y - 20)
-
                 if snake.direction == 'right':
                     x = snake.xcor()
                     snake.setx(x + 20)
-
                 if snake.direction == 'left':
                     x = snake.xcor()
                     snake.setx(x - 20)
-
             # KEYBOARD
             screen.listen()
             screen.onkeypress(go_up, "Up")
             screen.onkeypress(go_down, "Down")
             screen.onkeypress(go_left, "Left")
             screen.onkeypress(go_right, "Right")
-
             # MAIN
             while True:
-
                 screen.update()
-
-                # CHECK FOR COLLISION WITH BORDER
+            # CHECK FOR COLLISION WITH BORDER
                 if snake.xcor() > 270 or snake.xcor() < -290 or snake.ycor() > 230 or snake.ycor() < -230:
                     time.sleep(1)
                     snake.goto(0, 0)
@@ -644,63 +631,46 @@ def runNivi():
 
                     for segment in segments:
                         segment.goto(1000, 1000)
-
-                    # CLEAR
                     segments.clear()
-
                     # RESET SCORE
                     pen.clear()
                     pen.goto(0, 270)
-                    pen.write("\tGame Over\nScore: {}  High Score: {}".format(score, high_score), align="center",
-                              font=("Courier", 24, "normal"))
-                    f.close()
+                    pen.write("\tGame Over\nScore: {} High Score: {}".format(score,
+                    high_score), align="center",font=("Courier", 24, "normal"))
                     a = [[score]]
-                    lb += [a]
-                    f = open("snake_leaderboard.csv", "w", newline="")
-                    w = csv.writer(f)
-                    w.writerows(lb)
                     score = 0
-
                 # CHECK FOOD COLLISION
                 if snake.distance(food) < 20:
-
-                    # MOVE RANDOM SPOT
                     x = random.randint(-290, 270)
                     y = random.randint(-230, 230)
                     food.goto(x, y)
 
-                    # NEW SEGMENT
                     new_segment = turtle.Turtle()
                     new_segment.speed(0)
                     new_segment.shape("square")
                     new_segment.color("blue")
                     new_segment.penup()
                     segments.append(new_segment)
-
-                    # SHORTEN DELAY
+                # SHORTEN DELAY
                     delay -= 0.001
-
-                    # UPDATE SCORE
+                # UPDATE SCORE
                     score += 10
-
                     if score > high_score:
                         high_score = score
                     pen.clear()
-                    pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+                    pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
 
                 # MOVE END TO FIRST
                 for index in range(len(segments) - 1, 0, -1):
                     x = segments[index - 1].xcor()
                     y = segments[index - 1].ycor()
                     segments[index].goto(x, y)
-
                 # MOVE SEGMENT 0 TO HEAD
                 if len(segments) > 0:
                     x = snake.xcor()
                     y = snake.ycor()
                     segments[0].goto(x, y)
                 move()
-
                 # CHECK FOR BODY COLLISION
                 for segment in segments:
                     if segment.distance(snake) < 20:
@@ -712,17 +682,13 @@ def runNivi():
                         pen.goto(0, 270)
                         b = str([score])
                         print(b)
-                        pen.write("\tGame Over\nScore: {}  High Score: {}".format(score, high_score), align="center",
-                                  font=("Courier", 24, "normal"))
-
+                        pen.write("\tGame Over\nScore: {} High Score: {}".format(score,high_score), align="center",font=("Courier", 24, "normal"))
                         score = 0
 
                         for segment in segments:
                             segment.goto(1000, 1000)
-
-                        # CLEAR
+                # CLEAR
                         segments.clear()
-
                 time.sleep(delay)
         except:
             pass
